@@ -93,52 +93,66 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <h1>CRUD Operations</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Name"
-          required
-          style={{ backgroundColor: '#4a4a4a', color: '#ffffff' }}
-        />
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Value"
-          required
-          style={{ backgroundColor: '#4a4a4a', color: '#ffffff' }}
-        />
-        <button type="submit">Add Item</button>
-      </form>
-      <ul>
-        {items.length > 0 ? (
-          items.map((item) => (
-            <li key={item.id} style={{ color: '#ffffff' }}>
-              {item.name} - {item.value}
-              <button onClick={() => handleEditClick(item)} style={{ marginLeft: '20px', backgroundColor: '#4d79ff', color: '#ffffff', border: 'none', borderRadius: '4px', padding: '5px 10px' }}>
-                Edit
-              </button>
-              <button onClick={() => handleDelete(item.id)} style={{ marginLeft: '20px', backgroundColor: '#ff4d4d', color: '#ffffff', border: 'none', borderRadius: '4px', padding: '5px 10px' }}>
-                Delete
-              </button>
-            </li>
-          ))
-        ) : (
-          <li style={{ color: '#ffffff' }}>No Data</li>
-        )}
-      </ul>
+    <div className="flex justify-center items-center h-screen bg-gray-900">
+      <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h1 className="text-2xl font-bold mb-4">CRUD Operations</h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Name"
+            required
+            className="p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Value"
+            required
+            className="p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Add Item
+          </button>
+        </form>
+        <ul className="mt-4">
+          {items.length > 0 ? (
+            items.map((item) => (
+              <li key={item.id} className="flex items-center justify-between p-2 border-b border-gray-600">
+                <span>{item.name} - {item.value}</span>
+                <div className="flex space-x-2">
+                  <button
+                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onClick={() => handleEditClick(item)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="bg-red-600 text-white p-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))
+          ) : (
+            <li className="text-center py-2">No Data</li>
+          )}
+        </ul>
 
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        onSubmit={handleUpdate}
-        item={editItem}
-      />
-
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
+          onSubmit={handleUpdate}
+          item={editItem}
+        />
+      </div>
     </div>
   );
 }
