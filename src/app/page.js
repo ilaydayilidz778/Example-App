@@ -1,12 +1,15 @@
 "use client"
-import { getAPI, postAPI, deleteAPI } from '@/services/fetchAPI/index';
+import { getAPI, postAPI, deleteAPI, putAPI } from '@/services/fetchAPI/index';
 import { useState, useEffect } from 'react';
+import Modal from '@/components/Modal/Modal ';
 
 
 export default function Home() {
   const [name, setName] = useState('');
   const [value, setValue] = useState('');
   const [items, setItems] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editItem, setEditItem] = useState(null);
 
   useEffect(() => {
     fetchItems();
@@ -41,7 +44,7 @@ export default function Home() {
       // API yanıtını kontrol et
       if (res && res.status === "success") {
         fetchItems(); // Verileri yeniden yükle
-        setName('');  // Form alanlarını sıfırla
+        setName('');
         setValue('');
       } else {
         console.error("Failed to add item:", res.message || "Unknown error");
@@ -61,6 +64,31 @@ export default function Home() {
       }
     } catch (error) {
       console.error("Error deleting item:", error.message || error);
+    }
+  };
+
+  const handleEditClick = (item) => {
+    setEditItem(item);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setEditItem(null);
+  };
+
+  const handleUpdate = async (updatedItem) => {
+    try {
+      const res = await putAPI(`/items/${updatedItem.id}`, updatedItem);
+
+      if (res && res.status === "success") {
+        fetchItems(); // Verileri yeniden yükle
+        handleModalClose();
+      } else {
+        console.error("Failed to update item:", res.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Error updating item:", error.message || error);
     }
   };
 
@@ -91,6 +119,9 @@ export default function Home() {
           items.map((item) => (
             <li key={item.id} style={{ color: '#ffffff' }}>
               {item.name} - {item.value}
+              <button onClick={() => handleEditClick(item)} style={{ marginLeft: '20px', backgroundColor: '#4d79ff', color: '#ffffff', border: 'none', borderRadius: '4px', padding: '5px 10px' }}>
+                Edit
+              </button>
               <button onClick={() => handleDelete(item.id)} style={{ marginLeft: '20px', backgroundColor: '#ff4d4d', color: '#ffffff', border: 'none', borderRadius: '4px', padding: '5px 10px' }}>
                 Delete
               </button>
@@ -100,6 +131,14 @@ export default function Home() {
           <li style={{ color: '#ffffff' }}>No Data</li>
         )}
       </ul>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onSubmit={handleUpdate}
+        item={editItem}
+      />
+
     </div>
   );
 }

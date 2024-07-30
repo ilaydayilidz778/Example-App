@@ -67,7 +67,7 @@ const deleteAPI = async (
       cache: "no-store",
     });
 
-    if (response.status === 204) {
+    if (response.status === 200) {
       // HTTP 204 No Content dönerse, başarıyla silindi demektir
       return { status: "success" };
     } else {
@@ -81,6 +81,33 @@ const deleteAPI = async (
   }
 };
 
+const putAPI = async (
+  URL,
+  body,
+  headers = { "Content-Type": "application/json" }
+) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL + URL}`, {
+      method: "PUT",
+      headers: headers,
+      body: JSON.stringify(body),
+      cache: "no-store",
+    });
 
-export { postAPI, getAPI, deleteAPI };
+    if (response.status === 204) {
+      // HTTP 204 No Content dönerse, başarıyla güncellendi demektir
+      return { status: "success" };
+    } else {
+      const data = await response.json();
+      return data;
+    }
+  } catch (err) {
+    console.error(`API request failed: ${err}`);
+    throw new Error(`API request failed: ${err}`);
+  }
+};
+
+
+
+export { postAPI, getAPI, deleteAPI, putAPI };
 
