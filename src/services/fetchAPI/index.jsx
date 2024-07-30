@@ -67,7 +67,7 @@ const deleteAPI = async (
       cache: "no-store",
     });
 
-    if (response.status === 200) {
+    if (response.status === 204) {
       // HTTP 204 No Content dönerse, başarıyla silindi demektir
       return { status: "success" };
     } else {
@@ -94,7 +94,7 @@ const putAPI = async (
       cache: "no-store",
     });
 
-    if (response.status === 204) {
+    if (response.status === 200) {
       // HTTP 204 No Content dönerse, başarıyla güncellendi demektir
       return { status: "success" };
     } else {
