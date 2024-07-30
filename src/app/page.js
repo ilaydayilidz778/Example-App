@@ -1,5 +1,5 @@
 "use client"
-import { getAPI, postAPI } from '@/services/fetchAPI/index';
+import { getAPI, postAPI, deleteAPI } from '@/services/fetchAPI/index';
 import { useState, useEffect } from 'react';
 
 
@@ -48,6 +48,19 @@ export default function Home() {
       }
     } catch (error) {
       console.error("Error adding item:", error.message || error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await deleteAPI(`/items/${id}`);
+      if (res && res.status === "success") {
+        fetchItems(); // Verileri yeniden yükle
+      } else {
+        console.error("Failed to delete item:", res.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Error deleting item:", error.message || error);
     }
   };
 

@@ -71,6 +71,7 @@ export async function updateDataByAny(tableName, where, newData) {
 export async function deleteDataByAny(tableName, where) {
   try {
     const data = await prisma[tableName].delete({ where: where });
+    console.log(data);
     return data;
   } catch (error) {
     return { error: error.message };

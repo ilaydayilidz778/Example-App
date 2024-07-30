@@ -56,4 +56,31 @@ const getAPI = async (
   return data;
 };
 
-export { postAPI, getAPI };
+const deleteAPI = async (
+  URL,
+  headers = { "Content-Type": "application/json" }
+) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL + URL}`, {
+      method: "DELETE",
+      headers: headers,
+      cache: "no-store",
+    });
+
+    if (response.status === 204) {
+      // HTTP 204 No Content dönerse, başarıyla silindi demektir
+      return { status: "success" };
+    } else {
+      // Diğer durumlarda JSON verisini döndür
+      const data = await response.json();
+      return data;
+    }
+  } catch (err) {
+    console.error(`API request failed: ${err}`);
+    throw new Error(`API request failed: ${err}`);
+  }
+};
+
+
+export { postAPI, getAPI, deleteAPI };
+

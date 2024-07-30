@@ -5,7 +5,6 @@ const handler = async (req, res) => {
     if (req.method === 'GET') {
         try {
             const data = await getAllData("Item");
-            console.log(data);
 
             if (!data || data.error || data === undefined) {
                 throw new Error(data.error);
